@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.ticketease.MVVM.Event.Preferences.ViewModelPreferences
 import com.example.ticketease.R
@@ -31,7 +30,7 @@ fun Prefarence(navController: NavHostController, viewModel : ViewModelPreference
                 .fillMaxWidth(), contentAlignment = Alignment.Center
         ) {
 
-            Column() {
+            Column{
                 Spacer(modifier = Modifier.height(5.dp))
 
 
@@ -45,7 +44,7 @@ fun Prefarence(navController: NavHostController, viewModel : ViewModelPreference
 
 
         }
-        Column() {
+        Column{
 
 
             Box(
@@ -63,6 +62,7 @@ fun Prefarence(navController: NavHostController, viewModel : ViewModelPreference
 
                       for (event in state)
                         ListItem(
+                            id = event.eventId,
                               name = event.name,
                               location = event.location,
                               date = Instant.ofEpochMilli(event.date),
@@ -78,14 +78,14 @@ fun Prefarence(navController: NavHostController, viewModel : ViewModelPreference
                             .fillMaxWidth()
                             .height(70.dp), contentAlignment = Alignment.BottomCenter
                     ) {
-                        Row() {
-                            Column() {
+                        Row {
+                            Column {
                                 Image(
                                     painterResource(id = R.drawable.barbl),
                                     contentDescription = "image",
                                     modifier = Modifier
                                         .size(29.dp, 29.dp)
-                                        .offset(25.dp, -5.dp)
+                                        .offset(25.dp, (-5).dp)
                                         .clickable() {
                                             viewModel.createCatalog()
                                             navController.navigate("Catalog")
@@ -130,7 +130,7 @@ fun Prefarence(navController: NavHostController, viewModel : ViewModelPreference
                                         .size(30.dp, 30.dp)
                                         .offset(-5.dp, -5.dp)
                                         .clickable() {
-                                            //navController.navigate("Personal") // TODO CartView
+                                            navController.navigate("CartPersonal")
                                         },
                                     contentScale = ContentScale.Crop
                                 )
@@ -168,7 +168,7 @@ fun Prefarence(navController: NavHostController, viewModel : ViewModelPreference
         }
     }
 @Composable
-fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
+fun ListItem(id:Long, cost:Double, location:String, date: Instant, name:String, ID: Int, viewModel: ViewModelPreferences = hiltViewModel()){
     var isLiked by remember { mutableStateOf(false) }
 
     Card(modifier = Modifier
@@ -197,7 +197,9 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                     Image(
                         painterResource(id = ID),
                         contentDescription = "image",
-                        modifier = Modifier.size(250.dp, 230.dp).offset(65.dp, 10.dp),
+                        modifier = Modifier
+                            .size(250.dp, 230.dp)
+                            .offset(65.dp, 10.dp),
                         contentScale = ContentScale.Crop,
                     )
                     Column() {
@@ -216,7 +218,11 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                         )
                         Box(modifier = Modifier.height(120.dp)) {}
                         Button(
-                            onClick = { },
+                            onClick = {
+                                      viewModel.countTickets(id)
+                                    viewModel.putTicketToCart(id)
+
+                            },
                             modifier = Modifier
                                 .height(40.dp)
                                 .offset(15.dp, 140.dp)
@@ -235,7 +241,9 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                     Image(
                         painterResource(id = R.drawable.free_icon_ruble_1868089),
                         contentDescription = "image",
-                        modifier = Modifier.size(17.dp, 17.dp).offset(15.dp, 22.dp),
+                        modifier = Modifier
+                            .size(17.dp, 17.dp)
+                            .offset(15.dp, 22.dp),
                         contentScale = ContentScale.Crop
                     )
                     Text(
@@ -251,7 +259,9 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                     Image(
                         painterResource(id = R.drawable.free_icon_place_711170),
                         contentDescription = "image",
-                        modifier = Modifier.size(17.dp, 17.dp).offset(15.dp, 22.dp),
+                        modifier = Modifier
+                            .size(17.dp, 17.dp)
+                            .offset(15.dp, 22.dp),
                         contentScale = ContentScale.Crop
                     )
                     Text(
@@ -264,7 +274,9 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                     Image(
                         painterResource(id = R.drawable.free_icon_dates_4253987),
                         contentDescription = "image",
-                        modifier = Modifier.size(17.dp, 17.dp).offset(15.dp, 22.dp),
+                        modifier = Modifier
+                            .size(17.dp, 17.dp)
+                            .offset(15.dp, 22.dp),
                         contentScale = ContentScale.Crop
                     )
                     Text(

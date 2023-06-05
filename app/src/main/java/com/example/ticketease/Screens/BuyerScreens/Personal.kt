@@ -82,12 +82,12 @@ fun Personal(navController: NavHostController, viewModel: ViewModelPersonal = hi
                                         modifier = Modifier
                                             .offset((-80).dp, (-20).dp)
                                     ) {
-                                        Text(state.name + " ", fontSize = 20.sp, color = Color.Black)
-                                        Text(state.surname, fontSize = 20.sp, color = Color.Black)
+                                        Text(state.value.name + " ", fontSize = 20.sp, color = Color.Black)
+                                        Text(state.value.surname, fontSize = 20.sp, color = Color.Black)
 
                                     }
                                     Text(
-                                        state.mobile.toString(), fontSize = 20.sp, modifier = Modifier
+                                        state.value.mobile.toString(), fontSize = 20.sp, modifier = Modifier
                                             .offset((-80).dp, (-20).dp), color = Color.Black
                                     )
 
@@ -119,9 +119,9 @@ fun Personal(navController: NavHostController, viewModel: ViewModelPersonal = hi
                                         contentDescription = "image",
                                         modifier = Modifier
                                             .size(25.dp, 25.dp)
-                                            .clickable{
-                                                      navController.navigate("CitySelector")
-                                                      },
+                                            .clickable {
+                                                navController.navigate("CitySelector")
+                                            },
                                         contentScale = ContentScale.Crop,
 
                                         )
@@ -139,7 +139,7 @@ fun Personal(navController: NavHostController, viewModel: ViewModelPersonal = hi
                         ) {
 
                             Button(
-                                onClick = {navController.navigate("HelloPage5")  },
+                                onClick = { navController.navigate("HelloPage5")  },
                                 modifier = Modifier
                                     .height(50.dp)
                                     .offset(0.dp, 45.dp)
@@ -153,10 +153,8 @@ fun Personal(navController: NavHostController, viewModel: ViewModelPersonal = hi
 
                                 )
                             {
-
                                 Column {
                                     Text("Выйти", fontSize = 25.sp, color = Color.White)
-
                                 }
                             }
                         }
@@ -182,9 +180,8 @@ fun Personal(navController: NavHostController, viewModel: ViewModelPersonal = hi
                                         modifier = Modifier
                                             .size(29.dp, 29.dp)
                                             .offset(25.dp, (-5).dp)
-                                            .clickable{
+                                            .clickable {
                                                 viewModel.createCatalog()
-
                                                 navController.navigate("Catalog")
                                             },
                                         contentScale = ContentScale.Crop
@@ -209,8 +206,9 @@ fun Personal(navController: NavHostController, viewModel: ViewModelPersonal = hi
                                         modifier = Modifier
                                             .size(35.dp, 35.dp)
                                             .offset((-7).dp, (-7).dp)
-                                            .clickable{
-                                                //navController.navigate(NavigationItem.Prefarence.route)
+                                            .clickable {
+                                                viewModel.createPreference()
+                                                navController.navigate("Prefarence")
                                             },
                                         contentScale = ContentScale.Crop
                                     )
@@ -231,7 +229,7 @@ fun Personal(navController: NavHostController, viewModel: ViewModelPersonal = hi
                                             .size(30.dp, 30.dp)
                                             .offset(-25.dp, -5.dp)
                                             .clickable() {
-                                                //navController.navigate(NavigationItem.Cart.route)
+                                                navController.navigate("CartPersonal")
                                             },
                                         contentScale = ContentScale.Crop
                                     )

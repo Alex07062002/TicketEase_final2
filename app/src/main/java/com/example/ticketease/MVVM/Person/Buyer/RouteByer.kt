@@ -13,9 +13,10 @@ import com.example.ticketease.MVVM.Event.getTime.getTimeRepositoryImpl
 
 import com.example.ticketease.MVVM.Person.Buyer.Avtorize.AvtRepository
 import com.example.ticketease.MVVM.Person.Buyer.Avtorize.AvtRepositoryImpl
+import com.example.ticketease.MVVM.Person.Buyer.CartPersonal.CartPersonalRepository
+import com.example.ticketease.MVVM.Person.Buyer.CartPersonal.CartPersonalRepositoryImpl
 import com.example.ticketease.MVVM.Person.Buyer.Catalog.CatalogRepository
 import com.example.ticketease.MVVM.Person.Buyer.Catalog.CatalogRepositoryImpl
-import com.example.ticketease.MVVM.Person.Buyer.CitySelector.CitySelector
 import com.example.ticketease.MVVM.Person.Buyer.CitySelector.CitySelectorRepository
 import com.example.ticketease.MVVM.Person.Buyer.CitySelector.CitySelectorRepositoryImpl
 import com.example.ticketease.MVVM.Person.Buyer.Personal.PersonalRepository
@@ -36,7 +37,7 @@ import com.example.ticketease.MVVM.Person.Organizer.Register.RegisterRepositoryO
 import com.example.ticketease.MVVM.Person.Organizer.UpdateOrganizer.UpdateOrgRepository
 import com.example.ticketease.MVVM.Person.Organizer.UpdateOrganizer.UpdateOrgRepositoryImpl
 
-import com.example.ticketease.MVVM.url
+import com.example.ticketease.Screens.url
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -154,6 +155,12 @@ fun provideSharedPref(app : Application) : SharedPreferences{
         prefs: SharedPreferences
     ): PreferencesRepository {
         return PreferencesRepositoryImpl(api, prefs)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartPersonalRepository(api : BuyerRetrofitAPI,prefs : SharedPreferences) : CartPersonalRepository {
+        return CartPersonalRepositoryImpl(api, prefs)
     }
 }
 

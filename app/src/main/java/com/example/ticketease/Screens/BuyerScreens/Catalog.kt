@@ -17,6 +17,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.ticketease.DataClasses.Person.Buyer
 import com.example.ticketease.MVVM.Person.Buyer.Catalog.ViewModelCatalog
@@ -27,7 +28,6 @@ import com.example.ticketease.R
 import kotlinx.coroutines.flow.onEach
 import java.time.Instant
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hiltViewModel()) {
     val state = viewModel.state.value
@@ -61,6 +61,7 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
                 ) {
                     for (event in state){
                         ListItem(
+                            id = event.eventId,
                             name = event.name,
                             location = event.location,
                             date =  Instant.ofEpochMilli(event.date),
@@ -69,9 +70,6 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
                         )
                     }
                 }
-
-
-
                 Box(
                     modifier = Modifier
                         .background(color = colorResource(R.color.white))
@@ -87,7 +85,7 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
                                     .size(29.dp, 29.dp)
                                     .offset(25.dp, -5.dp)
                                     .clickable() {
-                                        //navController.navigate(NavigationItem.Catalog.route)
+                                        navController.navigate("Catalog")
                                     }
                                 ,
                                 contentScale = ContentScale.Crop
@@ -95,10 +93,8 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
                             Text(text = "Каталог", fontSize = 10.sp, modifier = Modifier.padding(23.dp, 5.dp))
                         }
                         Box(modifier = Modifier.size(30.dp, 30.dp)){
-
                         }
                         Box(modifier = Modifier.size(30.dp, 30.dp)){
-
                         }
                         Column() {
                             Image(
@@ -108,7 +104,8 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
                                     .size(35.dp, 35.dp)
                                     .offset(-7.dp, -7.dp)
                                     .clickable() {
-                                        //navController.navigate(NavigationItem.Prefarence.route) // TODO change this
+                                        viewModel.createPreference()
+                                        navController.navigate("Prefarence")
                                     }
                                 ,
                                 contentScale = ContentScale.Crop
@@ -116,7 +113,6 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
                             Text(text = "Предпочтения", fontSize = 10.sp, modifier = Modifier.offset(-25.dp, 0.dp))
                         }
                         Box(modifier = Modifier.size(30.dp, 30.dp)){
-
                         }
                         Column() {
                             Image(
@@ -126,7 +122,7 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
                                     .size(30.dp, 30.dp)
                                     .offset(-25.dp, -5.dp)
                                     .clickable() {
-                                        // navController.navigate(NavigationItem.Cart.route) // TODO change this
+                                        navController.navigate("CartPersonal")
                                     }
                                 ,
                                 contentScale = ContentScale.Crop
@@ -160,7 +156,7 @@ fun Catalog(navController: NavHostController, viewModel: ViewModelCatalog = hilt
 
 
 @Composable
-fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
+fun ListItem(id : Long, cost:Double, location:String, date: Instant, name:String, ID: Int, viewModel: ViewModelCatalog = hiltViewModel()){
     var isLiked by remember { mutableStateOf(false) }
 
     Card(modifier = Modifier
@@ -178,13 +174,7 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                             text = name, fontSize = 25.sp
                         )
                     }
-
                 }
-
-
-
-
-
                 Row() {
                     Image(
                         painterResource(id = ID),
@@ -210,7 +200,10 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                         )
                         Box(modifier = Modifier.height(120.dp)) {}
                         Button(
-                            onClick = { },
+                            onClick = {
+                                viewModel.putTicketToCart(id)
+                                      viewModel.countTickets(id)
+                            },
                             modifier = Modifier
                                 .height(40.dp)
                                 .offset(15.dp, 140.dp)
@@ -235,7 +228,7 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                         contentScale = ContentScale.Crop
                     )
                     Text(
-                        text = "Стоимость",
+                        text = cost.toString(),
                         modifier = Modifier.offset(20.dp, 20.dp),
                         fontSize = 15.sp
                     )
@@ -253,7 +246,7 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                         contentScale = ContentScale.Crop
                     )
                     Text(
-                        text = "Местоположение",
+                        text = location,
                         modifier = Modifier.offset(20.dp, 20.dp),
                         fontSize = 15.sp
                     )
@@ -268,7 +261,7 @@ fun ListItem(cost:Double, location:String, date: Instant, name:String, ID: Int){
                         contentScale = ContentScale.Crop
                     )
                     Text(
-                        text = "Дата проведения",
+                        text = date.toString(),
                         modifier = Modifier.offset(20.dp, 20.dp),
                         fontSize = 15.sp
                     )

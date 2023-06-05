@@ -3,11 +3,13 @@ package com.example.ticketease.MVVM.Person.Buyer
 import com.example.ticketease.DataClasses.Catalog
 import com.example.ticketease.DataClasses.CatalogResponce
 import com.example.ticketease.DataClasses.Event.EventDTO
+import com.example.ticketease.DataClasses.Event.EventId
 import com.example.ticketease.DataClasses.Person.*
 import com.example.ticketease.DataClasses.PlaceTime.PlaceDTO
 import com.example.ticketease.DataClasses.PlaceTime.PlaceId
 import com.example.ticketease.DataClasses.PlaceTime.PlaceTimeDTO
 import com.example.ticketease.DataClasses.PlaceTime.PlaceType
+import com.example.ticketease.DataClasses.Ticket.TicketDTO
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -48,9 +50,6 @@ interface BuyerRetrofitAPI {
  @PUT("/organizers/update")
  suspend  fun orgUpdate(@Body dataModel: OrganizerWithoutPswd?):  OrganizerWithoutPswd
 
- @POST("/events/create")
- suspend fun enterEventsParam(@Body dataModel: EventDTO?):  EventDTO
-
  @POST("/places/type")
  suspend fun getPlace(@Body dataModel: PlaceType?):  List<PlaceDTO>
 
@@ -66,4 +65,13 @@ interface BuyerRetrofitAPI {
 
  @POST("tickets/buyerId")
  suspend fun selectEventByBuyer(@Body buyer : BuyerId) : List<Long>
+
+ @POST("tickets/eventId/soldTicket")
+ suspend fun countSoldTicket(@Body eventId : EventId) : Long
+
+ @POST("/room/ticket")
+ suspend fun ticketRoom(@Body eventId: EventId) : Catalog
+
+ @PUT("/tickets/update")
+ suspend fun updateTicket(@Body ticket : TicketDTO) : TicketDTO
 }

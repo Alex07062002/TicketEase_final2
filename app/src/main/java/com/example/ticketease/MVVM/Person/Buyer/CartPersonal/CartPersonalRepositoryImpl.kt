@@ -1,17 +1,20 @@
-package com.example.ticketease.MVVM.Person.Buyer.Catalog
+package com.example.ticketease.MVVM.Person.Buyer.CartPersonal
 
 import android.content.SharedPreferences
 import com.example.ticketease.DataClasses.Catalog
-import com.example.ticketease.DataClasses.Event.EventId
-import com.example.ticketease.DataClasses.Person.*
+import com.example.ticketease.DataClasses.Person.BuyerId
+import com.example.ticketease.DataClasses.Person.BuyerUpdateCity
+import com.example.ticketease.DataClasses.Person.BuyerWithoutPswd
+import com.example.ticketease.DataClasses.Person.City
+import com.example.ticketease.DataClasses.Ticket.TicketDTO
 import com.example.ticketease.MVVM.Person.Buyer.BuyerRetrofitAPI
-
-import kotlinx.coroutines.flow.Flow
 import com.google.gson.Gson
 
-class CatalogRepositoryImpl(private val api : BuyerRetrofitAPI,
-                            private val prefs :SharedPreferences
-):CatalogRepository {
+class CartPersonalRepositoryImpl(
+    private val api : BuyerRetrofitAPI,
+    private val prefs : SharedPreferences
+) : CartPersonalRepository {
+
     override suspend fun getAllEvents(): List<Catalog>  =
         api.getAllEvents(City(prefs.getString("city", "")!!))
 
@@ -29,9 +32,5 @@ class CatalogRepositoryImpl(private val api : BuyerRetrofitAPI,
                 BuyerWithoutPswd::class.java).id)
     )
 
-    override suspend fun countSoldTicket(eventId: EventId): Long = api.countSoldTicket(eventId)
-    override suspend fun ticketRoom(eventId: EventId): Catalog = api.ticketRoom(eventId)
-
-
-
+    override suspend fun updateTicket(ticketDTO: TicketDTO): TicketDTO = api.updateTicket(ticketDTO)
 }

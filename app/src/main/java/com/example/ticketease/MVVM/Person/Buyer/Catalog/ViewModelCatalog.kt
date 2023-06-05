@@ -2,19 +2,14 @@ package com.example.ticketease.MVVM.Person.Buyer.Catalog
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ticketease.DataClasses.Catalog
-import com.example.ticketease.DataClasses.Person.Cities
+import com.example.ticketease.DataClasses.Event.EventId
+import com.example.ticketease.DataClasses.Event.EventIdCount
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +29,27 @@ class ViewModelCatalog @Inject constructor(
                 repository.preferencesRoom()
             }
             prefs.edit().putString("preferences",Gson().toJson(listPrefs)).apply()
+        }
+    }
+
+    fun countTickets(eventId : Long){
+        viewModelScope.launch {
+            val count = repository.countSoldTicket(EventId(eventId))
+            val listTickets = Gson().fromJson(prefs.getString("cart",null)!!,
+                Array<EventIdCount>::class.java).toMutableList()
+            listTickets.add(EventIdCount(eventId, count))
+            prefs.edit().putString("cart",Gson().toJson(listTickets)).apply()
+        }
+    }
+
+    fun putTicketToCart(eventId : Long) {
+        viewModelScope.launch {
+            val listTickets = Gson().fromJson(
+                prefs.getString("ticketCart", null)!!,
+                Array<Catalog>::class.java
+            ).toMutableList()
+            listTickets.add(repository.ticketRoom(EventId(eventId)))
+            prefs.edit().putString("ticketCart",Gson().toJson(listTickets)).apply()
         }
     }
 }

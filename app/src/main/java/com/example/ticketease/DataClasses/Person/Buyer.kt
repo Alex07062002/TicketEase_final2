@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class BuyerRequest(
     @JsonProperty("login")
     val login: String="",
-    @JsonProperty("password" )
+    @JsonProperty("password")
     val password: String=""
     )
 @Serializable
